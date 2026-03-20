@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Sudoku Studio — 6 trybów Sudoku: Klasyczne, Giant, Jigsaw, Skyscraper, Killer, Nierówności. Generuj arkusze PDF.">
+<title>Sudoku Studio</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-wrapper">
+
+  <!-- ── Top Navigation ─────────────────────────────────────── -->
+  <nav class="top-nav">
+    <a class="nav-logo" href="#">Sudoku<span>Studio</span></a>
+    <div class="nav-scrollable">
+      <button class="nav-btn active" data-mode="classic">
+        <span class="icon">☰</span> Klasyczne
+      </button>
+      <button class="nav-btn" data-mode="giant">
+        <span class="icon">⊞</span> Giant 16×16
+      </button>
+      <button class="nav-btn" data-mode="jigsaw">
+        <span class="icon">✦</span> Jigsaw
+      </button>
+      <button class="nav-btn" data-mode="skyscraper">
+        <span class="icon">🏙</span> Skyscraper
+      </button>
+      <button class="nav-btn" data-mode="killer">
+        <span class="icon">⚡</span> Killer
+      </button>
+      <button class="nav-btn" data-mode="inequality">
+        <span class="icon">≷</span> Nierówności
+      </button>
+      <button class="nav-btn pdf-btn" data-mode="pdf">
+        <span class="icon">📄</span> Drukuj PDF
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Main Content ───────────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- ══════════════════════════════════════════════════════
+         CLASSIC 9×9
+    ═══════════════════════════════════════════════════════ -->
+    <section id="sec-classic" class="game-section active">
+      <div class="section-header">
+        <h2>☰ Klasyczne Sudoku 9×9</h2>
+        <div class="timer-badge">
+          <span class="timer-icon">⏱</span>
+          <span id="timer-classic">00:00</span>
+        </div>
+      </div>
+
+      <div class="diff-row">
+        <button class="diff-btn" data-diff="easy">Łatwy</button>
+        <button class="diff-btn active" data-diff="medium">Średni</button>
+        <button class="diff-btn" data-diff="hard">Trudny</button>
+      </div>
+
+      <div class="action-row">
+        <button class="btn" id="classic-new">🔀 Nowa gra</button>
+        <button class="btn" id="classic-notes">
+          📝 Notatki <span class="notes-badge off">OFF</span>
+        </button>
+        <button class="btn primary" id="classic-check">✔ Sprawdź</button>
+        <button class="btn" id="classic-reset">↺ Reset</button>
+      </div>
+
+      <div class="game-layout">
+        <div class="grid-area">
+          <div id="classic-grid" class="sudoku-grid size-9"></div>
+        </div>
+        <div class="side-area">
+          <div id="classic-numpad" class="numpad"></div>
+        </div>
+      </div>
+
+      <div class="info-panel-wrap">
+        <button class="info-toggle" data-panel="info-classic">
+          ℹ Jak grać w Klasyczne Sudoku
+          <span class="toggle-arrow">↓</span>
+        </button>
+        <div id="info-classic" class="info-panel">
+          <p>Celem jest wypełnienie siatki 9×9 cyframi 1–9 tak, by:</p>
+          <ul>
+            <li>Każdy <strong>wiersz</strong> zawierał cyfry 1–9 (bez powtórzeń)</li>
+            <li>Każda <strong>kolumna</strong> zawierała cyfry 1–9 (bez powtórzeń)</li>
+            <li>Każdy <strong>kwadrat 3×3</strong> zawierał cyfry 1–9 (bez powtórzeń)</li>
+          </ul>
+          <p style="margin-top:8px">
+            <strong>Notatki:</strong> włącz tryb notatek (N), by zapisywać możliwe wartości w komórce.<br>
+            <strong>Klawiatura:</strong> strzałki nawigują, cyfry 1–9 wpisują, Del/0 usuwa.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         GIANT 16×16
+    ═══════════════════════════════════════════════════════ -->
+    <section id="sec-giant" class="game-section">
+      <div class="section-header">
+        <h2>⊞ Giant Sudoku 16×16</h2>
+        <div class="timer-badge">
+          <span class="timer-icon">⏱</span>
+          <span id="timer-giant">00:00</span>
+        </div>
+      </div>
+
+      <div class="diff-row">
+        <button class="diff-btn active" data-diff="easy">Łatwy</button>
+        <button class="diff-btn" data-diff="medium">Średni</button>
+      </div>
+
+      <div class="action-row">
+        <button class="btn" id="giant-new">🔀 Nowa gra</button>
+        <button class="btn" id="giant-notes">
+          📝 Notatki <span class="notes-badge off">OFF</span>
+        </button>
+        <button class="btn primary" id="giant-check">✔ Sprawdź</button>
+        <button class="btn" id="giant-reset">↺ Reset</button>
+      </div>
+
+      <div class="zoom-row">
+        <button class="zoom-btn" id="giant-zoom-out">−</button>
+        <span class="zoom-pct" id="giant-zoom-pct">100%</span>
+        <button class="zoom-btn" id="giant-zoom-in">+</button>
+        <span style="font-size:0.8rem;color:var(--text-3)">rozmiar komórek</span>
+      </div>
+
+      <div class="game-layout">
+        <div class="grid-area">
+          <div class="giant-scroll-wrap">
+            <div id="giant-grid" class="sudoku-grid size-16"></div>
+          </div>
+        </div>
+        <div class="side-area">
+          <div id="giant-numpad" class="numpad"></div>
+        </div>
+      </div>
+
+      <div class="info-panel-wrap">
+        <button class="info-toggle" data-panel="info-giant">
+          ℹ Jak grać w Giant Sudoku 16×16
+          <span class="toggle-arrow">↓</span>
+        </button>
+        <div id="info-giant" class="info-panel">
+          <p>Zasady identyczne jak w klasycznym Sudoku, ale na siatce 16×16:</p>
+          <ul>
+            <li>Używasz cyfr <strong>1–9</strong> oraz liter <strong>A–G</strong> (A=10, B=11, ..., G=16)</li>
+            <li>Każdy wiersz, kolumna i blok 4×4 musi zawierać wszystkie 16 symboli</li>
+            <li>Użyj przycisków <strong>+ / −</strong> by dostosować rozmiar siatki</li>
+          </ul>
+          <p style="margin-top:8px">
+            <strong>Klawiatura:</strong> cyfry 1–9, litery A–G, strzałki, Del/Backspace.<br>
+            <strong>Uwaga:</strong> tryb Średni usuwa więcej cyfr — puzzle jest wymagające!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         JIGSAW
+    ═══════════════════════════════════════════════════════ -->
+    <section id="sec-jigsaw" class="game-section">
+      <div class="section-header">
+        <h2>✦ Jigsaw Sudoku</h2>
+        <div class="timer-badge">
+          <span class="timer-icon">⏱</span>
+          <span id="timer-jigsaw">00:00</span>
+        </div>
+      </div>
+
+      <div class="diff-row">
+        <button class="diff-btn" data-diff="easy">Łatwy</button>
+        <button class="diff-btn active" data-diff="medium">Średni</button>
+        <button class="diff-btn" data-diff="hard">Trudny</button>
+      </div>
+
+      <div class="action-row">
+        <button class="btn" id="jigsaw-new">🔀 Nowa gra</button>
+        <button class="btn" id="jigsaw-notes">
+          📝 Notatki <span class="notes-badge off">OFF</span>
+        </button>
+        <button class="btn primary" id="jigsaw-check">✔ Sprawdź</button>
+        <button class="btn" id="jigsaw-reset">↺ Reset</button>
+      </div>
+
+      <div class="game-layout">
+        <div class="grid-area">
+          <div id="jigsaw-grid" class="sudoku-grid size-9 jigsaw-grid"></div>
+        </div>
+        <div class="side-area">
+          <div id="jigsaw-numpad" class="numpad"></div>
+        </div>
+      </div>
+
+      <div class="info-panel-wrap">
+        <button class="info-toggle" data-panel="info-jigsaw">
+          ℹ Jak grać w Jigsaw Sudoku
+          <span class="toggle-arrow">↓</span>
+        </button>
+        <div id="info-jigsaw" class="info-panel">
+          <p>Jigsaw Sudoku to wariant, w którym <strong>regiony mają nieregularny kształt</strong> (zamiast kwadratów 3×3).</p>
+          <ul>
+            <li>Każdy wiersz musi zawierać cyfry 1–9</li>
+            <li>Każda kolumna musi zawierać cyfry 1–9</li>
+            <li>Każdy <strong>kolorowy region</strong> (9 komórek) musi zawierać cyfry 1–9</li>
+          </ul>
+          <p style="margin-top:8px">
+            Regiony są losowo generowane przy każdej nowej grze — żadne dwa puzzle nie są takie same!
+            Generowanie może chwilę trwać (1–2s).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         SKYSCRAPER
+    ═══════════════════════════════════════════════════════ -->
+    <section id="sec-skyscraper" class="game-section">
+      <div class="section-header">
+        <h2>🏙 Skyscraper Sudoku</h2>
+        <div class="timer-badge">
+          <span class="timer-icon">⏱</span>
+          <span id="timer-skyscraper">00:00</span>
+        </div>
+      </div>
+
+      <div class="diff-row">
+        <button class="diff-btn" data-diff="easy">Łatwy</button>
+        <button class="diff-btn active" data-diff="medium">Średni</button>
+        <button class="diff-btn" data-diff="hard">Trudny</button>
+      </div>
+
+      <div class="action-row">
+        <button class="btn" id="sky-new">🔀 Nowa gra</button>
+        <button class="btn" id="sky-notes">
+          📝 Notatki <span class="notes-badge off">OFF</span>
+        </button>
+        <button class="btn primary" id="sky-check">✔ Sprawdź</button>
+        <button class="btn" id="sky-reset">↺ Reset</button>
+      </div>
+
+      <div class="game-layout">
+        <div class="grid-area">
+          <div id="sky-grid-wrapper"></div>
+        </div>
+        <div class="side-area">
+          <div id="sky-numpad" class="numpad"></div>
+        </div>
+      </div>
+
+      <div class="info-panel-wrap">
+        <button class="info-toggle" data-panel="info-sky">
+          ℹ Jak grać w Skyscraper Sudoku
+          <span class="toggle-arrow">↓</span>
+        </button>
+        <div id="info-sky" class="info-panel">
+          <p>Skyscraper to Sudoku z dodatkową zasadą: wyobraź sobie, że cyfry to <strong>wieżowce</strong> o różnych wysokościach (1–9).</p>
+          <ul>
+            <li>Liczba przy krawędzi planszy mówi, ile wieżowców <strong>widać z tego kierunku</strong></li>
+            <li>Wyższy wieżowiec zasłania niższe stojące za nim</li>
+            <li>Wciąż obowiązują standardowe zasady Sudoku</li>
+          </ul>
+          <p style="margin-top:8px">
+            <strong>Przykład:</strong> wskazówka „3" oznacza, że patrząc z tego miejsca widać dokładnie 3 wieżowce.<br>
+            Na <strong>trudnym</strong> poziomie podane są tylko wybrane wskazówki.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         KILLER
+    ═══════════════════════════════════════════════════════ -->
+    <section id="sec-killer" class="game-section">
+      <div class="section-header">
+        <h2>⚡ Killer Sudoku</h2>
+        <div class="timer-badge">
+          <span class="timer-icon">⏱</span>
+          <span id="timer-killer">00:00</span>
+        </div>
+      </div>
+
+      <div class="diff-row">
+        <button class="diff-btn active" data-diff="easy">Łatwy</button>
+        <button class="diff-btn" data-diff="medium">Średni</button>
+      </div>
+
+      <div class="action-row">
+        <button class="btn" id="killer-new">🔀 Nowa gra</button>
+        <button class="btn" id="killer-notes">
+          📝 Notatki <span class="notes-badge off">OFF</span>
+        </button>
+        <button class="btn primary" id="killer-check">✔ Sprawdź</button>
+        <button class="btn" id="killer-reset">↺ Reset</button>
+      </div>
+
+      <div class="game-layout">
+        <div class="grid-area">
+          <div id="killer-grid" class="sudoku-grid size-9 killer-grid"></div>
+        </div>
+        <div class="side-area">
+          <div id="killer-numpad" class="numpad"></div>
+        </div>
+      </div>
+
+      <div class="info-panel-wrap">
+        <button class="info-toggle" data-panel="info-killer">
+          ℹ Jak grać w Killer Sudoku
+          <span class="toggle-arrow">↓</span>
+        </button>
+        <div id="info-killer" class="info-panel">
+          <p>Killer Sudoku łączy Sudoku z łamigłówką matematyczną.</p>
+          <ul>
+            <li>Plansza podzielona jest na <strong>klatki</strong> (kolorowe grupy komórek)</li>
+            <li>Liczba w rogu klatki to <strong>suma</strong> wszystkich cyfr w tej klatce</li>
+            <li>W jednej klatce <strong>nie mogą powtarzać się</strong> cyfry</li>
+            <li>Wciąż obowiązują zasady Sudoku (wiersze, kolumny, bloki 3×3)</li>
+          </ul>
+          <p style="margin-top:8px">
+            <strong>Żadna komórka nie ma podanej wartości na starcie</strong> — wszystko wynikać musi z sum klatek!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         INEQUALITY / GREATER-THAN
+    ═══════════════════════════════════════════════════════ -->
+    <section id="sec-inequality" class="game-section">
+      <div class="section-header">
+        <h2>≷ Sudoku Nierówności</h2>
+        <div class="timer-badge">
+          <span class="timer-icon">⏱</span>
+          <span id="timer-inequality">00:00</span>
+        </div>
+      </div>
+
+      <div class="diff-row">
+        <button class="diff-btn" data-diff="easy">Łatwy</button>
+        <button class="diff-btn active" data-diff="medium">Średni</button>
+        <button class="diff-btn" data-diff="hard">Trudny</button>
+      </div>
+
+      <div class="action-row">
+        <button class="btn" id="ineq-new">🔀 Nowa gra</button>
+        <button class="btn" id="ineq-notes">
+          📝 Notatki <span class="notes-badge off">OFF</span>
+        </button>
+        <button class="btn primary" id="ineq-check">✔ Sprawdź</button>
+        <button class="btn" id="ineq-reset">↺ Reset</button>
+      </div>
+
+      <div class="game-layout">
+        <div class="grid-area">
+          <div id="ineq-grid" class="sudoku-grid size-9"></div>
+        </div>
+        <div class="side-area">
+          <div id="ineq-numpad" class="numpad"></div>
+        </div>
+      </div>
+
+      <div class="info-panel-wrap">
+        <button class="info-toggle" data-panel="info-ineq">
+          ℹ Jak grać w Sudoku Nierówności
+          <span class="toggle-arrow">↓</span>
+        </button>
+        <div id="info-ineq" class="info-panel">
+          <p>Sudoku Nierówności (Greater-Than Sudoku) to Sudoku z dodatkowymi znakami <strong>‹ › ∧ ∨</strong> między komórkami.</p>
+          <ul>
+            <li><strong>‹</strong> (poziome) — lewa komórka ma mniejszą wartość niż prawa</li>
+            <li><strong>›</strong> (poziome) — lewa komórka ma większą wartość niż prawa</li>
+            <li><strong>∧</strong> (pionowe) — górna komórka ma większą wartość niż dolna</li>
+            <li><strong>∨</strong> (pionowe) — górna komórka ma mniejszą wartość niż dolna</li>
+          </ul>
+          <p style="margin-top:8px">
+            Znaki <span style="color:var(--success)">zielenią się</span> gdy nierówność jest spełniona, 
+            <span style="color:var(--error)">czerwienieją</span> gdy jest naruszona.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         PDF GENERATOR
+    ═══════════════════════════════════════════════════════ -->
+    <section id="sec-pdf" class="game-section">
+      <div class="section-header">
+        <h2>📄 Generator arkuszy PDF</h2>
+      </div>
+
+      <div class="pdf-section-inner">
+        <p style="margin-bottom:16px">
+          Skonfiguruj arkusz i wygeneruj gotowy do druku PDF z zadaniami Sudoku.
+          Na jednej stronie A4 mieszczą się <strong>4 puzzle</strong> (układ 2×2).
+        </p>
+
+        <div id="pdf-rows" class="pdf-rows">
+          <!-- Rows added dynamically -->
+        </div>
+
+        <div class="pdf-controls">
+          <button class="btn" id="pdf-add-row">＋ Dodaj typ puzzle</button>
+          <button class="btn primary" id="pdf-generate">📥 Generuj PDF</button>
+        </div>
+
+        <div id="pdf-progress" class="hidden">
+          <div class="progress-label"></div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="info-panel-wrap">
+          <button class="info-toggle" data-panel="info-pdf">
+            ℹ Instrukcja generatora PDF
+            <span class="toggle-arrow">↓</span>
+          </button>
+          <div id="info-pdf" class="info-panel">
+            <ul>
+              <li>Dodaj jeden lub więcej wierszy — każdy wiersz to typ puzzle + poziom + liczba</li>
+              <li>Liczba puzzle w wierszu: 1–8 (każde puzzle trafia na osobne miejsce w siatce 2×2)</li>
+              <li>PDF zawiera nagłówek <em>"Sudoku — Arkusz ćwiczeń"</em>, tytuł każdego puzzle i datę generowania</li>
+              <li>Wszystkie 6 typów Sudoku są obsługiwane ze swoją specyficzną grafiką</li>
+              <li>Generowanie może chwilę trwać przy dużej liczbie puzzle</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /main -->
+</div><!-- /app-wrapper -->
+
+<!-- ── Win Modal ──────────────────────────────────────────────── -->
+<div id="win-modal" class="hidden">
+  <div class="win-card">
+    <div class="win-emoji">🎉</div>
+    <div class="win-title">Brawo!</div>
+    <div class="win-sub" id="win-time">Czas: 00:00</div>
+    <div class="win-actions">
+      <button class="btn primary" id="win-new">🔀 Nowa gra</button>
+      <button class="btn" onclick="App.hideWin()">✕ Zamknij</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Loading overlay ─────────────────────────────────────────── -->
+<div id="loading-overlay" class="hidden">
+  <div class="spinner"></div>
+  <div class="loading-text">Generowanie puzzle Jigsaw…</div>
+</div>
+
+<!-- ── Scripts ─────────────────────────────────────────────────── -->
+<!-- jsPDF for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Core engine -->
+<script src="js/engine.js"></script>
+
+<!-- Game modes -->
+<script src="js/classic.js"></script>
+<script src="js/giant.js"></script>
+<script src="js/jigsaw.js"></script>
+<script src="js/skyscraper.js"></script>
+<script src="js/killer.js"></script>
+<script src="js/inequality.js"></script>
+<script src="js/pdf.js"></script>
+
+<!-- App controller (must be last) -->
+<script src="js/app.js"></script>
+
+</body>
+</html>
